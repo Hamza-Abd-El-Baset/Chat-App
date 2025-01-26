@@ -1,10 +1,10 @@
 import asyncHandler from "express-async-handler";
-import mongoose from "mongoose";
 import User from "../models/user.model.js";
 import { CustomError } from "../middlewares/errorHandler.js";
 import cloudinary from "../lib/cloudinary.js";
 
 export const updateProfile = asyncHandler(async (req, res) => {
+
     const {image} = req.body
     const userId = req.user._id
 
