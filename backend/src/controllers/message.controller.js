@@ -3,7 +3,7 @@ import Message from "../models/message.model.js";
 import { v2 as cloudinary } from "cloudinary"
 import asyncHandler from "express-async-handler"
 
-export const getUsersWithChats = asyncHandler(async (req, res) => {
+export const getOtherUsers = asyncHandler(async (req, res) => {
     const loggedInUserId = req.user._id
     const filteredUsers = await User.find({_id: {$ne: loggedInUserId}}).select("-password")
     res.status(200).json(filteredUsers) 
@@ -24,7 +24,7 @@ export const sendMessage = asyncHandler(async (req, res) => {
     const { text, image } = req.body
     const { id: receiverId } = req.params
     const senderId = req.user._id
-
+    console.log("req", req)
     let imageUrl
 
     if(image) {
