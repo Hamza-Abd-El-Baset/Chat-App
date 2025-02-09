@@ -22,10 +22,10 @@ export const signup = asyncHandler(async (req, res, next) => {
         password: hashedPassword
     })
 
-    generateToken(user._id, res)
+    const token = generateToken(user._id)
     await user.save()
 
-    res.status(200).json(user) 
+    res.status(200).json({ user, token }) 
 })
 
 export const login = asyncHandler(async (req, res) => {
@@ -38,18 +38,10 @@ export const login = asyncHandler(async (req, res) => {
 
     if(!isPasswordCorrect) throw new CustomError(400, "Invalid credentials")
     
-    generateToken(user._id, res)
+    const token = generateToken(user._id)
 
-    res.status(200).json(user)
+    res.status(200).json({ user, token })
 })
 
-export const logout = asyncHandler(async (req, res) => {
-    res.cookie("jwt", "", {maxAge:0})
-    res.status(200).json({message: "Logged out successfully"})  
-})
-
-export const checkAuth = asyncHandler(async (req, res) => {
-    res.status(200).json(req.user)  
-})
 
 

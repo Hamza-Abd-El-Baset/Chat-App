@@ -2,6 +2,7 @@ import User from "../models/user.model.js";
 import Message from "../models/message.model.js";
 import { v2 as cloudinary } from "cloudinary"
 import asyncHandler from "express-async-handler"
+import { io } from "../lib/socket.js";
 
 export const getOtherUsers = asyncHandler(async (req, res) => {
     const loggedInUserId = req.user._id
@@ -24,7 +25,7 @@ export const sendMessage = asyncHandler(async (req, res) => {
     const { text, image } = req.body
     const { id: receiverId } = req.params
     const senderId = req.user._id
-    console.log("req", req)
+
     let imageUrl
 
     if(image) {
@@ -41,7 +42,7 @@ export const sendMessage = asyncHandler(async (req, res) => {
 
     await message.save()
 
-    // @todo: realtime functionality goes here => socket.io
+    io.to([receiverId, senderId]).emit("newMessage", message)
 
     res.status(201).json(message)
 })
