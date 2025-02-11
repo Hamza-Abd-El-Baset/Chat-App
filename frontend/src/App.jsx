@@ -12,13 +12,13 @@ import { Toaster } from 'react-hot-toast'
 import { useThemeStore } from "./store/useThemeStore"
 
 const App = () => {
-  const { authUser, connectSocket, checkAuth } = useAuthStore()
+  const { authUser, checkAuth } = useAuthStore()
   const {theme} = useThemeStore()
 
   useEffect(() => {
-    checkAuth()
-    connectSocket()
-  }, [connectSocket, checkAuth])
+    const userInfo = localStorage.getItem("userInfo")
+    checkAuth(userInfo)
+  }, [checkAuth])
 
 
   return (

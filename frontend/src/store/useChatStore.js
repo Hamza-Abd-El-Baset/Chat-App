@@ -72,10 +72,11 @@ export const useChatStore = create((set, get) => ({
         if(isMessageListenerSet) return
 
         socket.on("newMessage", (message) => {
-            set({
-                messages: [...get().messages, message],
-                isMessageListenerSet: true
-            })
+            set({ isMessageListenerSet: true })
+
+            if(selectedUser._id !== message.senderId) return
+            
+            set({ messages: [...get().messages, message]})
         })
     },
 

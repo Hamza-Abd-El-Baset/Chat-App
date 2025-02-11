@@ -2,6 +2,7 @@ import { create } from "zustand"
 import { axiosInstance } from "../lib/axios.js"
 import toast from "react-hot-toast"
 import { io } from "socket.io-client"
+import { useChatStore } from "./useChatStore.js"
 
 const API_DOMAIN = import.meta.env.VITE_API_DOMAIN
 
@@ -50,18 +51,20 @@ export const useAuthStore = create((set, get) => ({
             set({ authUser: null })
             localStorage.removeItem("userInfo")
             get().disconnectSocket()
+            useChatStore.setState({ selectedUser: null})
         } catch (error) {
             console.log("Error in logout", error)
             toast.error(error.response?.data?.message || "An error occurred")
         }
     },
 
-    checkAuth: () => {
-        const userInfo = localStorage.getItem("userInfo")
+    checkAuth: (userInfo) => {
         if(userInfo) {
             set({ authUser: JSON.parse(userInfo).user })
+            get().connectSocket()
+        } else {
+            get().logout()
         }
-        get().connectSocket()
     },
 
     updateProfile: async (formData) => {
