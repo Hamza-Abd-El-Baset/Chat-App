@@ -4,7 +4,7 @@ import toast from "react-hot-toast"
 import { io } from "socket.io-client"
 import { useChatStore } from "./useChatStore.js"
 
-const API_DOMAIN = import.meta.env.VITE_API_DOMAIN
+const API_DOMAIN = import.meta.env.VITE_MODE === 'development' ? import.meta.env.VITE_API_DOMAIN : "/"
 
 export const useAuthStore = create((set, get) => ({
     authUser: null,
