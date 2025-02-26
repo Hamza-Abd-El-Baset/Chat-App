@@ -40,3 +40,15 @@ server.listen(PORT, () => {
     console.log(`server is running on port ${PORT}`)
     connectDB()
 })
+
+if(process.env.NODE_ENV === "production"){
+    // Self Ping to keep the server awake
+    const serverUrl = process.env.SERVER_URL;
+
+    setInterval(() => {
+        fetch(`${serverUrl}/`)
+            .then(res => res.text())
+            .then(console.log("Self-ping successful"))
+            .catch(err => console.error("Self-ping failed:", err));
+    }, 10 * 60 * 1000); // 10 minutes
+}
